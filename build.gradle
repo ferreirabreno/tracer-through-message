@@ -16,6 +16,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	implementation 'io.micrometer:micrometer-tracing-bridge-brave'
 	implementation 'com.amazonaws:aws-java-sdk-sns:1.12.385'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
