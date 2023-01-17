@@ -4,10 +4,6 @@ import com.amazonaws.services.sqs.AmazonSQS;
 import com.amazonaws.services.sqs.model.Message;
 import com.amazonaws.services.sqs.model.ReceiveMessageRequest;
 import com.amazonaws.services.sqs.model.ReceiveMessageResult;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.MapperFeature;
-import com.fasterxml.jackson.databind.json.JsonMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,11 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.util.Arrays;
-import java.util.Optional;
 
 @Service
 public class MyQueueConsumer {
@@ -31,8 +23,7 @@ public class MyQueueConsumer {
 
     @Scheduled(fixedDelay = 15000)
     public void receiveMessage() {
-        var messageRequest = new ReceiveMessageRequest("http://localhost:4566/000000000000/myQueue");
-        messageRequest.withMessageAttributeNames("All");
+        var messageRequest = new ReceiveMessageRequest(myQueueUrl);
         ReceiveMessageResult receiveMessageResult = amazonSQS.receiveMessage(messageRequest);
         receiveMessageResult.getMessages().forEach(this::processMessage);
     }
