@@ -19,6 +19,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.Arrays;
+import java.util.Optional;
 
 @Service
 public class MyQueueConsumer {
@@ -39,29 +40,15 @@ public class MyQueueConsumer {
     private void processMessage(Message message) {
         try {
             logger.info("Message received {}.", message);
-            logger.info("context: {}", message.getAttributes());
-            String messageBody = message.getBody();
-            SimpleMessage simpleMessage = fromJson(messageBody);
-            logger.info("Simple message: {}", simpleMessage);
+            TopicMessage topicMessage = JsonUtils.fromJson(message.getBody(), TopicMessage.class);
+            logger.info("Topic message content: {}", topicMessage);
+            SimpleMessage simpleMessage = JsonUtils.fromJson(topicMessage.message(), SimpleMessage.class);
+            logger.info("Simple message content: {}", simpleMessage);
             amazonSQS.deleteMessage(myQueueUrl, message.getReceiptHandle());
-        } catch (Exception e) {
-            logger.error(Arrays.toString(e.getStackTrace()));
+        } catch (Exception exception) {
+            logger.error(Arrays.toString(exception.getStackTrace()));
         }
     }
 
-    private SimpleMessage fromJson(String json) throws Exception {
-        var jsonMapper = JsonMapper.builder()
-                .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
-                .configure(MapperFeature.ACCEPT_CASE_INSENSITIVE_PROPERTIES, true)
-                .build();
 
-        jsonMapper.registerModule(new JavaTimeModule());
-
-        try {
-            return jsonMapper.readValue(json, SimpleMessage.class);
-        } catch (Exception e) {
-            throw new Exception("Couldn't deserialize object from json.");
-        }
-
-    }
 }

@@ -4,12 +4,16 @@ import com.amazonaws.services.sns.AmazonSNS;
 import com.amazonaws.services.sns.model.MessageAttributeValue;
 import com.amazonaws.services.sns.model.PublishRequest;
 import com.amazonaws.services.sns.model.PublishResult;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.MapperFeature;
+import com.fasterxml.jackson.databind.json.JsonMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,15 +28,23 @@ public class MyTopicPublisher {
     public void publishMessage(SimpleMessage message, Map<String, String> tracingHeaders) {
         logger.info("Sending message \"{}\" for sns topic myTopic.", message);
 
-        Map<String, MessageAttributeValue> messageAttributes = buildMessageAttributes(tracingHeaders);
+        try {
+            var messageJson = JsonUtils.toJson(message);
+            Map<String, MessageAttributeValue> messageAttributes = buildMessageAttributes(tracingHeaders);
 
-        PublishRequest publishRequest = new PublishRequest(myTopicArn, message.toString());
-        publishRequest.withMessageAttributes(messageAttributes);
+            PublishRequest publishRequest = new PublishRequest(myTopicArn, messageJson);
+            publishRequest.withMessageAttributes(messageAttributes);
+            logger.info("Message content: {}", publishRequest);
 
-        PublishResult publishResult = amazonSNS.publish(publishRequest);
+            PublishResult publishResult = amazonSNS.publish(publishRequest);
 
-        logger.info("Message {} sent to myTopic.", publishResult.getMessageId());
+            logger.info("Message {} sent to myTopic.", publishResult.getMessageId());
+        } catch (Exception exception) {
+            logger.error(Arrays.toString(exception.getStackTrace()));
+        }
     }
+
+
 
     private Map<String, MessageAttributeValue> buildMessageAttributes(Map<String, String> attributes) {
         Map<String, MessageAttributeValue> messageAttributes = new HashMap<>();
