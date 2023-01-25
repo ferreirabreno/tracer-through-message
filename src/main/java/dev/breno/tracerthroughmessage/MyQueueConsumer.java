@@ -30,11 +30,12 @@ public class MyQueueConsumer {
 
     private void processMessage(Message message) {
         try {
-            logger.info("Message received {}.", message);
             TopicMessage topicMessage = JsonUtils.fromJson(message.getBody(), TopicMessage.class);
             logger.info("Topic message content: {}", topicMessage);
+
             SimpleMessage simpleMessage = JsonUtils.fromJson(topicMessage.message(), SimpleMessage.class);
             logger.info("Simple message content: {}", simpleMessage);
+
             amazonSQS.deleteMessage(myQueueUrl, message.getReceiptHandle());
         } catch (Exception exception) {
             logger.error(Arrays.toString(exception.getStackTrace()));

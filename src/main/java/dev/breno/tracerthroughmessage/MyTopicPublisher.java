@@ -23,16 +23,14 @@ public class MyTopicPublisher {
     @Value("${aws.sns.topic.myTopic.arn}") private String myTopicArn;
 
     public void publishMessage(SimpleMessage message, Map<String, String> tracingHeaders) {
-        logger.info("Sending message \"{}\" for sns topic myTopic.", message);
-
         try {
-            var messageJson = JsonUtils.toJson(message);
+            logger.info("Sending message \"{}\" for sns topic myTopic.", message);
+
+            String messageJson = JsonUtils.toJson(message);
             Map<String, MessageAttributeValue> messageAttributes = buildMessageAttributes(tracingHeaders);
 
             PublishRequest publishRequest = new PublishRequest(myTopicArn, messageJson);
             publishRequest.withMessageAttributes(messageAttributes);
-            logger.info("Message content: {}", publishRequest);
-
             PublishResult publishResult = amazonSNS.publish(publishRequest);
 
             logger.info("Message {} sent to myTopic.", publishResult.getMessageId());
@@ -40,8 +38,6 @@ public class MyTopicPublisher {
             logger.error(Arrays.toString(exception.getStackTrace()));
         }
     }
-
-
 
     private Map<String, MessageAttributeValue> buildMessageAttributes(Map<String, String> attributes) {
         Map<String, MessageAttributeValue> messageAttributes = new HashMap<>();
