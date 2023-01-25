@@ -1,4 +1,4 @@
-package dev.breno.tracerthroughmessage;
+package dev.breno.tracerthroughmessage.utils;
 
 import org.springframework.http.HttpHeaders;
 

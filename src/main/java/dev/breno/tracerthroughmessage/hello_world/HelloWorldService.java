@@ -1,5 +1,7 @@
-package dev.breno.tracerthroughmessage;
+package dev.breno.tracerthroughmessage.hello_world;
 
+import dev.breno.tracerthroughmessage.messaging.MyTopicPublisher;
+import dev.breno.tracerthroughmessage.messaging.models.SimpleMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

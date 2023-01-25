@@ -1,4 +1,4 @@
-package dev.breno.tracerthroughmessage;
+package dev.breno.tracerthroughmessage.utils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;

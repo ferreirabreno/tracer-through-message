@@ -1,5 +1,7 @@
-package dev.breno.tracerthroughmessage;
+package dev.breno.tracerthroughmessage.hello_world;
 
+import dev.breno.tracerthroughmessage.utils.HttpResponseUtils;
+import dev.breno.tracerthroughmessage.Observability;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;

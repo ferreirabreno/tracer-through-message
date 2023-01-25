@@ -1,9 +1,11 @@
-package dev.breno.tracerthroughmessage;
+package dev.breno.tracerthroughmessage.messaging;
 
 import com.amazonaws.services.sns.AmazonSNS;
 import com.amazonaws.services.sns.model.MessageAttributeValue;
 import com.amazonaws.services.sns.model.PublishRequest;
 import com.amazonaws.services.sns.model.PublishResult;
+import dev.breno.tracerthroughmessage.messaging.models.SimpleMessage;
+import dev.breno.tracerthroughmessage.utils.JsonUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

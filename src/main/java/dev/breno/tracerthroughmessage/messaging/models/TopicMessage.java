@@ -1,4 +1,4 @@
-package dev.breno.tracerthroughmessage;
+package dev.breno.tracerthroughmessage.messaging.models;
 
 import java.time.LocalDateTime;
 import java.util.Map;
